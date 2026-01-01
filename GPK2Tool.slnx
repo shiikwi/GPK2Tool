@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="gfbTool/gfbTool.csproj" />
+  <Project Path="sceTool/sceTool.csproj" Id="0a34e4d3-67af-401e-84ea-1c24792c2444" />
 </Solution>

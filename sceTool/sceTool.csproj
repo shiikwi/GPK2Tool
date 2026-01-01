@@ -8,4 +8,8 @@
     <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\gfbTool\gfbTool.csproj" />
+  </ItemGroup>
+
 </Project>
