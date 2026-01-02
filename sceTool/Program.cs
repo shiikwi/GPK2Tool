@@ -17,6 +17,13 @@ class Program
                 scb.ExportScb(arg, outpath);
                 Console.WriteLine($"Exported {filename}");
             }
+            else if (Path.GetExtension(arg).ToLower() == ".txt")
+            {
+                var scbpath = Path.ChangeExtension(arg, ".scb");
+                var sf0path = Path.ChangeExtension(arg, ".sf0");
+                scb.ImportScb(arg, scbpath, sf0path);
+                Console.WriteLine($"Imported {Path.GetFileName(scbpath)}");
+            }
         }
 
         Console.WriteLine($"Convert Finish......");
