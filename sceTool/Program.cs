@@ -7,6 +7,14 @@ class Program
     static void Main(string[] args)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        if (Path.GetFileName(args[0]) == "system.dat")
+        {
+            var dat = new Systemdat();
+            dat.DumpDat(args[0], Path.ChangeExtension(args[0], ".json"));
+            Console.WriteLine($"Dump system.dat success");
+            return;
+        }
+
         foreach (var arg in args)
         {
             var scb = new scbFile();
