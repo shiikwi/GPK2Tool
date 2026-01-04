@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using gfbTool;
 
 namespace sceTool
 {
@@ -33,7 +34,8 @@ namespace sceTool
                 var sceData = br.ReadBytes((int)br.BaseStream.Length - 0xC);
                 if (header.EncryptFlag != 0) NOTDecrypt(sceData);
 
-                sceData = gfbTool.Util.LzssDecompress(sceData, header.UnpackSize);
+                var lzss = new LzssStream();
+                sceData = lzss.Decompress(sceData, header.UnpackSize);
                 var outStrings = Encoding.GetEncoding("shift_jis").GetString(sceData);
                 File.WriteAllText(outpath, outStrings);
                 //File.WriteAllText(outpath, outStrings, Encoding.GetEncoding("shift_jis"));
@@ -42,7 +44,7 @@ namespace sceTool
 
         public void ImportScb(string filepath, string scbpath, string sf0path)
         {
-            var encoding = Encoding.GetEncoding("gbk");
+            var encoding = Encoding.GetEncoding("gbk", new EncoderExceptionFallback(), new DecoderExceptionFallback());
             string rawText = File.ReadAllText(filepath);
             //rawText = CleanText(rawText);
             List<uint> POffset = new List<uint>();
@@ -62,7 +64,8 @@ namespace sceTool
                 EncryptFlag = 1
             };
 
-            byte[] CompressBuffer = gfbTool.Util.lzssCompress(buffer);
+            var lzss = new LzssStream();
+            byte[] CompressBuffer = lzss.Compress(buffer);
             header.UnpackSize = (uint)buffer.Length;
             NOTDecrypt(CompressBuffer);
 
@@ -101,6 +104,7 @@ namespace sceTool
             foreach (char c in text)
             {
                 if (c == '\u301c') sb.Append('~');
+                else if (c == '\u30fb') sb.Append('·');
                 else sb.Append(c);
             }
             return sb.ToString();

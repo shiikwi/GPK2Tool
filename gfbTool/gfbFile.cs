@@ -57,7 +57,8 @@ namespace gfbTool
                 byte[] pixelData;
                 if (header.FormatFlag != 0)
                 {
-                    pixelData = Util.LzssDecompress(rawdata, header.UnPackSize);
+                    var lzss = new LzssStream();
+                    pixelData = lzss.Decompress(rawdata, header.UnPackSize);
                 }
                 else
                 {
@@ -124,7 +125,8 @@ namespace gfbTool
                 byte[] CompressPixel = pixelData;
                 if (IfCompress)
                 {
-                    CompressPixel = Util.lzssCompress(pixelData);
+                    var lzss = new LzssStream();
+                    CompressPixel = lzss.Compress(pixelData);
                     header.PackSize = (uint)CompressPixel.Length;
                 }
 
